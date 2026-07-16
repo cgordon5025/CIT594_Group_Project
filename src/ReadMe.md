@@ -7,3 +7,8 @@ git push origin <branch name>
 
 to pull most recent changes from main
 git pull origin main
+
+to make a new branch
+git checkout -b <branch name>
+Typically this will be a shorthand descript on the branch purpose
+i.e. git checkout -b fileReader
