@@ -1,10 +1,15 @@
 package edu.upenn.cit5940.datamanagement;
 
+import edu.upenn.cit5940.Article;
 import edu.upenn.cit5940.common.dto.CSVFormatException;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.nio.file.Paths;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileReader {
     private final CharacterReader reader;
@@ -28,17 +33,22 @@ public class JsonFileReader {
      * @throws IOException        when the underlying reader encounters an error.
      * @throws CSVFormatException when the CSV file is formatted incorrectly.
      */
-    public void readAllArticles() throws IOException, CSVFormatException {
+    public void readAllArticles(String fileName) throws IOException, CSVFormatException {
         // TODO: Add code here
         try {
             //reader has been init in the constructor
             //note its a char reader (extension of buffered reader)
             //Generally speaking we want to split at the comma
-
-            var temp = reader.read(); //reader reads in DESC vals of ASCII
+            //
+            var temp = Files.readAllBytes(Paths.get(fileName));
+            ObjectMapper objectMapper = new ObjectMapper();
+            var other = objectMapper.readTree(temp);
+//            ArticlesParsed.parsedArticles = objectMapper.readValue(temp, HashMap.class);
+//            var temp = reader.read(); //reader reads in DESC vals of ASCII
 //            Map<String, Article> runningArticles = new HashMap<>();
             List<String> singleArticleRaw = new ArrayList<>(); //should maintain insertion order
             StringBuilder currWord = new StringBuilder();
+            //THIS WILL DEAL WITH ESCAPE CHARS SINCE WE CAN HAVE QUOTES WITHIN A FIELD
 //            while (temp != -1) {
 //                switch (csvLineState) {
 //                    case NORMAL:

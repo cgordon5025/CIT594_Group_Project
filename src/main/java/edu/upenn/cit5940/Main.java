@@ -14,7 +14,7 @@ try{
     //THIS IS WRITTEN BY CHARLEE TO TEST THE JSON PATH
 
     JsonFileReader parsed = new JsonFileReader(new CharacterReader(args[0]));
-    parsed.readAllArticles();
+    parsed.readAllArticles(args[0]);
     ArticlesParsed.buildGraphFromArticles();
 }catch(IOException| CSVFormatException e){
     System.out.println("error");

@@ -5,7 +5,7 @@ import edu.upenn.cit5940.Article;
 import java.util.*;
 
 public class ArticlesParsed {
-    public static final Map<String, Article> parsedArticles = new HashMap<>();
+    public static Map<String, Article> parsedArticles = new HashMap<>();
     public static Map<String, Set<String>> allMappedKeywords = new HashMap<>();
 
     public static final Set<String> STOP_WORDS = TextFileReader.readTXTFile("data/stop_words.txt");
