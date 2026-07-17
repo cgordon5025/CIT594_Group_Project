@@ -14,8 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONParserStrategy implements ArticleParserStrategy {
 
-//    public class JSONParserStrategy {
-//    @Override
+    @Override
     public void parse(File file) throws Exception {
         try{
             ObjectMapper objectMapper = new ObjectMapper();

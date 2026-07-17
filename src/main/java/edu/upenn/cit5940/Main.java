@@ -3,6 +3,7 @@ package edu.upenn.cit5940;
 import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.ArticleParserStrategy;
 import edu.upenn.cit5940.datamanagement.ArticlesParsed;
+import edu.upenn.cit5940.datamanagement.KeywordMap;
 import edu.upenn.cit5940.datamanagement.ParserStrategyFactory;
 
 import java.io.File;
@@ -56,8 +57,8 @@ public class Main {
 
             // parse the file and generate the map of Articles
             parser.parse(dataFile);
-
-//            System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
+            KeywordMap.buildGraphFromArticles(); //now that the files are loaded lets load up the keyword map
+            System.out.println("\n[Success] Loaded " + ArticlesParsed.parsedArticles.size() + " articles.");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {
             // catches file issues
