@@ -57,7 +57,7 @@ public class Main {
             // parse the file and generate the map of Articles
             parser.parse(dataFile);
 
-            System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
+//            System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {
             // catches file issues
