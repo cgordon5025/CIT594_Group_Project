@@ -29,15 +29,12 @@ public class JSONParserStrategy implements ArticleParserStrategy {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-//        try (CharacterReader characterReader = new CharacterReader(file.getPath())) {
-//            return readAllArticles(characterReader);
-//        }
     }
 
     /**
-     * Reads the entire JSON stream and adds it to the growing map of Articles stored in ArticlesParsed
+     * Reads the entire JSON stream and parses it into a map of Articles.
      *
-     *
+     * @return A map where the key is the article's URI (String) and the value
      * is the fully populated Article object.
      * @throws IOException when the underlying reader encounters an error.
      * @throws Exception when the CSV file is formatted incorrectly.

@@ -13,5 +13,4 @@ public interface ArticleParserStrategy {
      * @throws Exception if parsing fails due to format errors or I/O issues.
      */
     void parse(File file) throws Exception;
-//    Map<String, Article> parse(File file) throws Exception;
 }
