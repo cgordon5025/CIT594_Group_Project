@@ -17,10 +17,10 @@ public class CSVParserStrategy implements ArticleParserStrategy {
     }
 
     @Override
-    public Map<String, Article> parse(File file) throws Exception {
+    public void parse(File file) throws Exception {
 
         try (CharacterReader characterReader = new CharacterReader(file.getPath())) {
-            return readAllArticles(characterReader);
+            readAllArticles(characterReader);
         }
     }
 
@@ -32,9 +32,8 @@ public class CSVParserStrategy implements ArticleParserStrategy {
      * @throws IOException when the underlying reader encounters an error.
      * @throws CSVFormatException when the CSV file is formatted incorrectly.
      */
-    public Map<String, Article> readAllArticles(CharacterReader reader) throws IOException, CSVFormatException {
+    public void readAllArticles(CharacterReader reader) throws IOException, CSVFormatException {
 
-        Map<String, Article> articles = new HashMap<>();
         List<String> currentRecordFields = new ArrayList<>();
         StringBuilder currentField = new StringBuilder();
 
@@ -57,7 +56,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
                         }
                         case '\n' -> {
                             currentRecordFields.add("");
-                            processRecord(currentRecordFields, articles);
+                            ProcessArticleRecord.processRecord(currentRecordFields);
                             currentRecordFields.clear();
                         }
                         default -> {
@@ -82,7 +81,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
                         case '\n' -> {
                             currentRecordFields.add(currentField.toString());
                             currentField.setLength(0);
-                            processRecord(currentRecordFields, articles);
+                            ProcessArticleRecord.processRecord(currentRecordFields);
                             currentRecordFields.clear();
                             state = STATES.START_OF_FIELD;
                         }
@@ -117,7 +116,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
                         case '\n' -> {
                             currentRecordFields.add(currentField.toString());
                             currentField.setLength(0);
-                            processRecord(currentRecordFields, articles);
+                            ProcessArticleRecord.processRecord(currentRecordFields);
                             currentRecordFields.clear();
                             state = STATES.START_OF_FIELD;
                         }
@@ -128,7 +127,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
                 case CR_AT_RECORD_END -> {
                     switch (c) {
                         case '\n' -> {
-                            processRecord(currentRecordFields, articles);
+                            ProcessArticleRecord.processRecord(currentRecordFields);
                             currentRecordFields.clear();
                             state = STATES.START_OF_FIELD;
                         }
@@ -147,36 +146,11 @@ public class CSVParserStrategy implements ArticleParserStrategy {
             // handle end of CSV in case there are no LF
         } else if (state == STATES.NORMAL_FIELD || state == STATES.QUOTE_IN_QUOTED_FIELD) {
             currentRecordFields.add(currentField.toString());
-            processRecord(currentRecordFields, articles);
+            ProcessArticleRecord.processRecord(currentRecordFields);
             // handles case where comma is the ending character
         } else if (state == STATES.START_OF_FIELD && !currentRecordFields.isEmpty()) {
             currentRecordFields.add("");
-            processRecord(currentRecordFields, articles);
+            ProcessArticleRecord.processRecord(currentRecordFields);
         }
-
-        return articles;
-    }
-
-    /**
-     * Helper method to convert a parsed record (list of strings) into an Article
-     * and add it to the map.
-     */
-    private void processRecord(List<String> rec, Map<String, Article> articles) throws CSVFormatException {
-
-        // handle null inputs
-        if (rec == null || articles == null) {
-            return;
-        }
-
-        // ignore the header row
-        if (rec.getFirst().equals("uri")) {
-            return;
-        }
-
-        // create new article using the list of strings
-        Article article = new Article(rec);
-
-        // add article to map of articles
-        articles.put(article.getUri(), article);
     }
 }

@@ -9,13 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// I REFACTORED THIS A BIT TO MAKE THE METHODS VOID TO ACCOMMODATE THE MASTER MAPS
 public class JSONParserStrategy implements ArticleParserStrategy{
 
     @Override
-    public Map<String, Article> parse(File file) throws Exception {
+    public void parse(File file) throws Exception {
 
         try (CharacterReader characterReader = new CharacterReader(file.getPath())) {
-            return readAllArticles(characterReader);
+            readAllArticles(characterReader);
         }
     }
 
@@ -27,13 +28,12 @@ public class JSONParserStrategy implements ArticleParserStrategy{
      * @throws IOException when the underlying reader encounters an error.
      * @throws Exception when the CSV file is formatted incorrectly.
      */
-    public Map<String, Article> readAllArticles(CharacterReader reader) throws IOException, Exception {
+    public void readAllArticles(CharacterReader reader) throws IOException, Exception {
 
         Map<String, Article> articles = new HashMap<>();
         List<String> currentRecordFields = new ArrayList<>();
         StringBuilder currentField = new StringBuilder();
 
         // TODO: implement the JSON parser
-        return new HashMap<String, Article>();
     }
 }

@@ -2,6 +2,7 @@ package edu.upenn.cit5940;
 
 import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.ArticleParserStrategy;
+import edu.upenn.cit5940.datamanagement.ArticlesParsed;
 import edu.upenn.cit5940.datamanagement.ParserStrategyFactory;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class Main {
             ArticleParserStrategy parser = ParserStrategyFactory.getStrategy(dataFile);
 
             // parse the file and generate the map of Articles
-            Map<String, Article> articles = parser.parse(dataFile);
+            parser.parse(dataFile);
 
             System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
 
