@@ -2,7 +2,7 @@ package edu.upenn.cit5940.datamanagement;
 
 import java.io.*;
 import java.util.*;
-import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.common.dto.*;
 
 
 public class CSVParserStrategy implements ArticleParserStrategy {
@@ -17,10 +17,12 @@ public class CSVParserStrategy implements ArticleParserStrategy {
     }
 
     @Override
-    public Map<String, Article> parse(File file) throws Exception {
+    public void parse(File file) throws Exception {
 
         try (CharacterReader characterReader = new CharacterReader(file.getPath())) {
-            return readAllArticles(characterReader);
+            readAllArticles(characterReader);
+            return;
+//            return readAllArticles(characterReader);
         }
     }
 
@@ -32,6 +34,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
      * @throws IOException when the underlying reader encounters an error.
      * @throws CSVFormatException when the CSV file is formatted incorrectly.
      */
+    //NOTE FROM CHARLEE: I THINK WE CAN MAKE THIS VOID SINCE WE WANT TO POPULATE THE CLASS/FINAL ARTICLES PARSED AND CAN SEND THAT DIRECTLY RATHER THAN HANDLING IT IN MAIN
     public Map<String, Article> readAllArticles(CharacterReader reader) throws IOException, CSVFormatException {
 
         Map<String, Article> articles = new HashMap<>();
@@ -153,7 +156,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
             currentRecordFields.add("");
             processRecord(currentRecordFields, articles);
         }
-
+        ArticlesParsed.parsedArticles.putAll(articles);
         return articles;
     }
 

@@ -12,5 +12,6 @@ public interface ArticleParserStrategy {
      * @return A map where the key is the article's URI and the value is the Article object.
      * @throws Exception if parsing fails due to format errors or I/O issues.
      */
-    Map<String, Article> parse(File file) throws Exception;
+    void parse(File file) throws Exception;
+//    Map<String, Article> parse(File file) throws Exception;
 }

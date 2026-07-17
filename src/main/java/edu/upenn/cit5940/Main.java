@@ -54,9 +54,9 @@ public class Main {
             ArticleParserStrategy parser = ParserStrategyFactory.getStrategy(dataFile);
 
             // parse the file and generate the map of Articles
-            Map<String, Article> articles = parser.parse(dataFile);
-
-            System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
+//            Map<String, Article> articles = parser.parse(dataFile);
+                parser.parse(dataFile);
+//            System.out.println("\n[Success] Loaded " + articles.size() + " articles.");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {
             // catches file issues
