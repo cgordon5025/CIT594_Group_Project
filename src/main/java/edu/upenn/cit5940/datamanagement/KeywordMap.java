@@ -10,20 +10,13 @@ public class KeywordMap {
 
     public static final Set<String> STOP_WORDS = TextFileReader.readTXTFile("stop_words.txt");
     //    RECYCLED FROM HW 6
-    private static String[] normalizeText(String text) {
-        return text.trim().toLowerCase().replaceAll("[^a-z0-9\\s-]", " ")
-                .replaceAll("^-+", "") //remove leading -
-                .replaceAll("-+$", "") //remove trailing -
-                .replaceAll("\\s-+", " ") //remove trailing - after space
-                .replaceAll("-+\\s", " ") //remove leading - b4 space
-                .split(" ");// split at the spaces
-    }
+
     //recycled from HW 9
     public static void buildGraphFromArticles() {
         for (Article article : ArticlesParsed.parsedArticles.values()) {
             var articleTitle = article.getTitle();
             if (articleTitle.isEmpty()) continue;
-            var titleNormalized = normalizeText(Arrays.toString(articleTitle.split(" ")));
+            var titleNormalized = NormalizeText.normalizeText(Arrays.toString(articleTitle.split(" ")));
 
             var articleUri = article.getUri();
             for (String wordInTitle : titleNormalized) {
