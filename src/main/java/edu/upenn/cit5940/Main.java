@@ -1,8 +1,12 @@
 package edu.upenn.cit5940;
 
-public class Main {
-    public static void main(String[] args) {
-        //TAKES IN ARGS FROM LAUNCH OF APP (E.G. MYPROJECT.JAVA FILENAME.CSV)
+import edu.upenn.cit5940.ui.TechNewsApp;
 
+public class Main {
+
+    public static void main(String[] args){
+        TechNewsApp app = new TechNewsApp(args);
+
+        app.run();
     }
 }

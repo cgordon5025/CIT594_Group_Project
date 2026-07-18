@@ -10,5 +10,6 @@ git pull origin main
 
 to make a new branch
 git checkout -b <branch name>
+switch branches: git checkout <branch name>
 Typically this will be a shorthand descript on the branch purpose
 i.e. git checkout -b fileReader
