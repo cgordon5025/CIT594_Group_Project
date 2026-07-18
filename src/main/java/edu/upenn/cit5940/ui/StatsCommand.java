@@ -2,6 +2,8 @@ package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
+import java.util.Map;
+
 class StatsCommand implements Command {
     private final ArticleProcessor processor;
 
