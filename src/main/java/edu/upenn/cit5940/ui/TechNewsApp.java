@@ -1,5 +1,6 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.ArticleParserStrategy;
 import edu.upenn.cit5940.datamanagement.ArticlesParsed;
 import edu.upenn.cit5940.datamanagement.KeywordMap;
@@ -7,6 +8,7 @@ import edu.upenn.cit5940.datamanagement.ParserStrategyFactory;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class TechNewsApp {
@@ -62,7 +64,10 @@ public class TechNewsApp {
             // parse the file and generate the map of Articles
             parser.parse(dataFile);
             KeywordMap.buildGraphFromArticles();
-            System.out.println(KeywordMap.allMappedKeywords.size());
+            //trie is made only using titles
+            KeywordMap.insertListToTrie(ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle).toArray(String[]::new));
+            System.out.println(KeywordMap.root);
+            System.out.println(ArticlesParsed.articlesPubDates);
             System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
             System.out.println("Architecture initialization complete!\n");
 
@@ -80,6 +85,7 @@ public class TechNewsApp {
 
     /**
      * Helper method to change from one application state to another
+     *
      * @param newState: new appstate
      */
     public void changeState(AppState newState) {

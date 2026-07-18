@@ -9,7 +9,14 @@ public class KeywordMap {
     public static Map<String, Set<String>> allMappedKeywords = new HashMap<>();
 
     public static final Set<String> STOP_WORDS = TextFileReader.readTXTFile("stop_words.txt");
-    //    RECYCLED FROM HW 6
+
+    //setting up for a trie built of fthe keywords
+    private static class Node {
+        private HashMap<Character, Node> children = new HashMap<>();
+        private boolean endOfWord = false;
+    }
+
+    public static Node root = new Node();
 
     //recycled from HW 9
     public static void buildGraphFromArticles() {
@@ -20,12 +27,62 @@ public class KeywordMap {
 
             var articleUri = article.getUri();
             for (String wordInTitle : titleNormalized) {
-                if (STOP_WORDS.contains(wordInTitle) || wordInTitle.isEmpty()|| wordInTitle.length()==1) continue;
+                if (STOP_WORDS.contains(wordInTitle) || wordInTitle.isEmpty() || wordInTitle.length() == 1) continue;
                 if (!allMappedKeywords.containsKey(wordInTitle)) {
                     allMappedKeywords.put(wordInTitle, new TreeSet<>());
-                }                var existingKeyword = allMappedKeywords.get(wordInTitle);
+                }
+                var existingKeyword = allMappedKeywords.get(wordInTitle);
+                existingKeyword.add(articleUri);
+            }
+            //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
+            var articleBody = article.getBody();
+            if(articleBody.isEmpty())continue;
+            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
+            for (String wordInBody : bodyNormalized) {
+                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
+                if (!allMappedKeywords.containsKey(wordInBody)) {
+                    allMappedKeywords.put(wordInBody, new TreeSet<>());
+                }
+                var existingKeyword = allMappedKeywords.get(wordInBody);
                 existingKeyword.add(articleUri);
             }
         }
     }
+
+    public static void insertWordToTrie(String word) {
+        if (word == null || word.trim().isEmpty()) return; //ignore empty/null words
+        String normalizedWord = word.trim().toLowerCase();
+        Node parentNode = root;
+        Node existingNode = null;
+
+        for (int i = 0; i < normalizedWord.length(); i++) {
+            char currChar = normalizedWord.charAt(i);
+            if (!Character.isLetter(currChar)) {
+                continue; //skip numbers and non-alpha chars
+            }
+            existingNode = (parentNode.children.containsKey(currChar)) ? parentNode.children.get(currChar) : null;
+            if (existingNode == null) { //if its null we add it to the parent as a valid child
+                parentNode.children.put(currChar, new Node());
+                existingNode = parentNode.children.get(currChar);
+                if (i == normalizedWord.length() - 1) {
+                    existingNode.endOfWord = true;
+                }
+            } else {
+                if (i == normalizedWord.length() - 1) {
+                    existingNode.endOfWord = true; //word is a substring of diff so let's mark theree is an end here
+                }
+            }
+            parentNode = existingNode;
+
+        }
+    }
+
+    // this implementation is given to students in the starter code
+    public static void insertListToTrie(String[] wordList) {
+        for (String string : wordList) {
+            insertWordToTrie(string);
+        }
+    }
+
+
 }

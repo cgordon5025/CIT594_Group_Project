@@ -7,6 +7,11 @@ import edu.upenn.cit5940.datamanagement.NormalizeText;
 
 import java.util.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * The ArticleProcessor class holds the various methods that will be called upon by the presentation layer.
  *
@@ -18,14 +23,15 @@ public class ArticleProcessor {
 
     }
 
-    public Set<String> keywordSearch(String rawKeywordSearch) {
+    public List<String> searchArticlesByKeywords(List<String> keywords) {
+        // TODO: Implementation here
         Set<String> articleIds = new HashSet<>();
         Map<String, Set<String>> intersectingArticles = new HashMap<>();
-        if (rawKeywordSearch == null || rawKeywordSearch.trim().isEmpty() || ArticlesParsed.parsedArticles.size() == 0) {
+        if (keywords == null || keywords.isEmpty() || ArticlesParsed.parsedArticles.size() == 0) {
             System.out.println("No Articles Found");
         }
-        String[] normalizedText = NormalizeText.normalizeText(rawKeywordSearch);
-        for (String word : normalizedText) {
+//        String[] normalizedText = NormalizeText.normalizeText(keywords);
+        for (String word : keywords) {
             if (KeywordMap.STOP_WORDS.contains(word) || word.isEmpty()) {
                 continue;
             }
@@ -34,7 +40,7 @@ public class ArticleProcessor {
                 articleIds.addAll(KeywordMap.allMappedKeywords.get(word));
             }
         }
-        if (normalizedText.length > 1 && articleIds != null && articleIds.size() > 0) {
+        if (keywords.size() > 1 && articleIds != null && articleIds.size() > 0) {
             articleIds = findIntersectingDocs(intersectingArticles);
         }
         //lastly lets get those titles
@@ -42,10 +48,43 @@ public class ArticleProcessor {
         for (String articleId : articleIds) {
             articleTitles.add(ArticlesParsed.parsedArticles.get(articleId).getTitle());
         }
-        return articleTitles;
-
+        return articleTitles.stream().toList();
+//        return new ArrayList<String>();
     }
 
+    public List<String> getAutocompleteSuggestions(String prefix) {
+        // TODO: Implementation here
+        if(prefix==null||prefix.trim().isEmpty()){
+            return new ArrayList<>(); //return empty since there is nothing
+        }
+        String normalizedPrefix = prefix.trim().toLowerCase();
+
+        return new ArrayList<String>();
+    }
+
+    public Map<String, Integer> calculateTopTopics(String period) {
+        // TODO: Implementation here
+        return new HashMap<String, Integer>();
+    }
+
+    public Map<String, Integer> calculateTrends(String topic, String start, String end) {
+        // TODO: Implementation here
+        return new HashMap<String, Integer>();
+    }
+
+    public List<String> getArticlesByDateRange(String start, String end) {
+        // TODO: Implementation here
+        return new ArrayList<String>();
+    }
+
+    public Article getArticleDetails(String uri) {
+        return ArticlesParsed.parsedArticles.get(uri);
+    }
+
+    public int getTotalArticleCount() {
+        return ArticlesParsed.parsedArticles.size();
+    }
+    //helper to find intersecting docs from a search
     private Set<String> findIntersectingDocs(Map<String, Set<String>> intersectingArticles) {
         List<Set<String>> docIds = new ArrayList<>();
         for(Map.Entry<String, Set<String>> entry: intersectingArticles.entrySet()){
