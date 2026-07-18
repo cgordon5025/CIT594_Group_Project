@@ -76,13 +76,13 @@ class ArticlesCommand implements Command {
         if (titles.isEmpty()) {
             System.out.println("No articles found.");
         } else {
-            // format output
             System.out.println("=============================================================");
             System.out.println("ARTICLES PUBLISHED BETWEEN " + startDate + " AND " + endDate);
             System.out.println("=============================================================");
             for (String title : titles) {
                 System.out.println(title);
             }
+            System.out.println("==================================================");
         }
     }
 }

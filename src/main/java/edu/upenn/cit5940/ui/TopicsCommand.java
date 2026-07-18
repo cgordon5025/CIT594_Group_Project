@@ -35,25 +35,17 @@ class TopicsCommand implements Command {
         Map<String, Integer> topTopics = processor.calculateTopTopics(period);
 
         // format output
-        System.out.println("==================================================");
-        System.out.println("          TOP TOPICS FOR " + period);
-        System.out.println("==================================================");
-
         if (topTopics.isEmpty()) {
-            System.out.println("No articles or words found for the specified period.");
+            System.out.println("No articles or words found for the specified month.");
         } else {
+            System.out.println("==================================================");
+            System.out.println("          TOP TOPICS FOR " + period);
+            System.out.println("==================================================");
             int rank = 1;
             for (Map.Entry<String, Integer> entry : topTopics.entrySet()) {
                 System.out.printf("  %2d. %-15s (%d occurrences)%n", rank++, entry.getKey(), entry.getValue());
             }
         }
         System.out.println("==================================================");
-
-//        LocalDate date1 = LocalDate.of(2026,12,1);
-//        LocalDate date2 = LocalDate.of(2026,12,25);
-//        System.out.println(date1.getMonth());
-//        if (date2.isAfter(date1)) {
-//            System.out.println("date2 is after date1");
-//        }
     }
 }

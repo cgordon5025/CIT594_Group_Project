@@ -47,14 +47,17 @@ class TrendsCommand implements Command {
         // make call to processing layer
         Map<String, Integer> trendResults = processor.calculateTrends(topic, startPeriod, endPeriod);
 
-        // format output
-        System.out.println("==================================================");
-        System.out.println(" TREND ANALYSIS FOR TOPIC: " + topic.toUpperCase());
-        System.out.println("==================================================");
+        if (trendResults.isEmpty()) {
+            System.out.println("No trends found for topic in the specified period.");
+        } else {
+            System.out.println("==================================================");
+            System.out.println(" TREND ANALYSIS FOR TOPIC: " + topic.toUpperCase());
+            System.out.println("==================================================");
 
-        // iterate through map of dates/counts
-        for (Map.Entry<String, Integer> entry : trendResults.entrySet()) {
-            System.out.println("  " + entry.getKey() + " : " + entry.getValue() + " occurrences");
+            // iterate through map of dates/counts
+            for (Map.Entry<String, Integer> entry : trendResults.entrySet()) {
+                System.out.println("  " + entry.getKey() + " : " + entry.getValue() + " occurrences");
+            }
         }
         System.out.println("==================================================");
     }
