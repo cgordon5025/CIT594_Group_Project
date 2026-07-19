@@ -17,7 +17,7 @@ class TopicsCommand implements Command {
 
         // validate that there is only one argument
         if (args.length != 1) {
-            System.out.println("Error: Missing period parameter. Format: topics <period>");
+            System.out.println("Error: Missing period parameter. Usage: topics <period>");
             return;
         }
 

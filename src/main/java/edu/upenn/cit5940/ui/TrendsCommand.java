@@ -16,7 +16,7 @@ class TrendsCommand implements Command {
 
         // argument must have exactly 3 parts
         if (args.length != 3) {
-            System.out.println("Error: Invalid arguments. Format: trends <topic> <start_period> <end_period>");
+            System.out.println("Error: Invalid arguments. Usage: trends <topic> <start_period> <end_period>");
             return;
         }
 

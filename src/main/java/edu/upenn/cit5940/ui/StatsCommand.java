@@ -12,7 +12,7 @@ class StatsCommand implements Command {
     public void execute(String[] args) {
         // validate there are no arguments
         if (args.length > 0) {
-            System.out.println("Error: The 'stats' command does not accept arguments. Format: stats");
+            System.out.println("Error: The 'stats' command does not accept arguments. Usage: stats");
             return;
         }
 

@@ -37,7 +37,7 @@ class CommandModeState implements AppState {
         String line = scanner.nextLine().trim();
 
         if (line.isEmpty()) {
-            System.out.println("Error: Please enter a valid command.");
+            System.out.println("Error: Please enter a valid choice.");
             return;
         }
 
