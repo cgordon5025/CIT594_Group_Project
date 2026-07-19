@@ -14,7 +14,7 @@ class AutocompleteCommand implements Command {
     public void execute(String[] args) {
         // there must be only one argument -- the prefix
         if (args.length != 1) {
-            System.out.println("Error: Missing prefix parameter. Format: autocomplete <prefix>");
+            System.out.println("Error: Missing prefix parameter. Usage: autocomplete <prefix>");
             return;
         }
 

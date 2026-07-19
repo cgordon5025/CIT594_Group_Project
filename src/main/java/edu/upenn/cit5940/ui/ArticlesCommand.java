@@ -25,7 +25,7 @@ class ArticlesCommand implements Command {
 
         // validate argument count = 2
         if (args.length != 2) {
-            System.out.println("Error: Invalid arguments. Format: articles <start_date> <end_date>");
+            System.out.println("Error: Invalid arguments. Usage: articles <start_date> <end_date>");
             return;
         }
 

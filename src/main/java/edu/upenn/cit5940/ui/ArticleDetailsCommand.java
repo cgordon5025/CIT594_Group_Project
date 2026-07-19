@@ -15,7 +15,7 @@ class ArticleDetailsCommand implements Command {
     public void execute(String[] args) {
         // validate there is only one argument
         if (args.length != 1) {
-            System.out.println("Error: Invalid article ID input. Format: article <id>");
+            System.out.println("Error: Invalid article ID input. Usage: article <id>");
             return;
         }
 

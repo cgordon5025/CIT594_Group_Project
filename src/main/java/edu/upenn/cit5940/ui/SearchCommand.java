@@ -15,7 +15,7 @@ class SearchCommand implements Command {
     public void execute(String[] args) {
         // must have at least one argument
         if (args.length == 0) {
-            System.out.println("Error: Missing search keywords. Format: search <keyword> <keyword(s)>");
+            System.out.println("Error: Missing search keywords. Usage: search <keyword> <keyword(s)>");
             return;
         }
 
