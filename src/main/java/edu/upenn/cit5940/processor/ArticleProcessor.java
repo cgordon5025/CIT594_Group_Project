@@ -74,6 +74,9 @@ public class ArticleProcessor {
 
     public List<String> getArticlesByDateRange(String start, String end) {
         // TODO: Implementation here
+        //need to get the closest start and end dates that exist in the set
+        //also need to validate if the start/end dates are real dates (i.e. feb 31 does not exist)
+
         return new ArrayList<String>();
     }
 

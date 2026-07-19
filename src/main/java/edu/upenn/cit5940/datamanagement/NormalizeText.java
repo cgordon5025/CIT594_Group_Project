@@ -7,6 +7,7 @@ public class NormalizeText {
                 .replaceAll("-+$", "") //remove trailing -
                 .replaceAll("\\s-+", " ") //remove trailing - after space
                 .replaceAll("-+\\s", " ") //remove leading - b4 space
+                .replaceAll("\\n"," ") //remove line breaks
                 .split(" ");// split at the spaces
     }
 }
