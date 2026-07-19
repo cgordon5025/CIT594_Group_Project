@@ -1,5 +1,6 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.datamanagement.NormalizeText;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ class SearchCommand implements Command {
         }
 
         // copy arguments into list so we avoid modifying the original array
-        List<String> keywords = Arrays.asList(args);
+        List<String> keywords = Arrays.asList(NormalizeText.normalizeText(args.toString()));
 
         // make call to processor layer
         List<String> matchingTitles = processor.searchArticlesByKeywords(keywords);
