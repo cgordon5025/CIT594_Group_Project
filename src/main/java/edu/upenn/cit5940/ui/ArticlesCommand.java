@@ -2,7 +2,6 @@ package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -42,10 +41,6 @@ class ArticlesCommand implements Command {
             System.out.println("Error: Invalid end date syntax '" + endDate + "'. Must be YYYY-MM-DD.");
             return;
         }
-
-        // validate given dates through strict datetimeformatter
-        LocalDate startLocalDate;
-        LocalDate endLocalDate;
 
         // handle start date logical validation
         try {

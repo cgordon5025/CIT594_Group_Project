@@ -21,7 +21,10 @@ public class ArticlesParsed {
         }
     }
 
+
+
     public static Map<String, Article> parsedArticles = new HashMap<>();
-    public static TreeSet<ArticleDate> articlesPubDates = new TreeSet(); //by default its ascending order
+//    public static TreeSet<ArticleDate> articlesPubDates = new TreeSet(); //by default its ascending order
+    public static TreeSet<Article> sortedArticles = new TreeSet();
 
 }

@@ -15,6 +15,7 @@ public class ProcessArticleRecord {
         }
         Article newArticle = new Article(rec);
         ArticlesParsed.parsedArticles.put(newArticle.getUri(), newArticle);
-        ArticlesParsed.articlesPubDates.add(new ArticlesParsed.ArticleDate(newArticle.getDate(), newArticle.getTitle()));
+//        ArticlesParsed.articlesPubDates.add(new ArticlesParsed.ArticleDate(newArticle.getDate(), newArticle.getTitle()));
+        ArticlesParsed.sortedArticles.add(newArticle);
     }
 }

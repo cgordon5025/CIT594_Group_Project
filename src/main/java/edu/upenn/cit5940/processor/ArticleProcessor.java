@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The ArticleProcessor class holds the various methods that will be called upon by the presentation layer.
@@ -19,8 +20,6 @@ import java.util.Map;
 public class ArticleProcessor {
 
     public ArticleProcessor() {
-
-
     }
 
     public List<String> searchArticlesByKeywords(List<String> keywords) {
@@ -75,9 +74,17 @@ public class ArticleProcessor {
     public List<String> getArticlesByDateRange(String start, String end) {
         // TODO: Implementation here
         //need to get the closest start and end dates that exist in the set
-        //also need to validate if the start/end dates are real dates (i.e. feb 31 does not exist)
+        return ArticlesParsed.sortedArticles.stream()
+                // filter articles based on inclusive start and end dates
+                .filter(article -> article.getDate() != null
+                        && article.getDate().compareTo(start) >= 0
+                        && article.getDate().compareTo(end) <= 0)
 
-        return new ArrayList<String>();
+                // extract the title
+                .map(Article::getTitle)
+
+                // and collect into a list
+                .collect(Collectors.toList());
     }
 
     public Article getArticleDetails(String uri) {
@@ -87,6 +94,15 @@ public class ArticleProcessor {
     public int getTotalArticleCount() {
         return ArticlesParsed.parsedArticles.size();
     }
+
+    public Article getOldestArticle() {
+        return ArticlesParsed.sortedArticles.first();
+    }
+
+    public Article getNewestArticle() {
+        return ArticlesParsed.sortedArticles.last();
+    }
+
 
     //helper to find intersecting docs from a search
     private Set<String> findIntersectingDocs(Map<String, Set<String>> intersectingArticles) {
