@@ -8,6 +8,7 @@ import java.util.*;
  * This class maintains the master map of Articles and the master map of titles to keywords
  */
 public class ArticlesParsed {
+
     public static class ArticleDate implements Comparable<ArticleDate>{
         String publishDate;
         String articleTitle;
@@ -23,5 +24,6 @@ public class ArticlesParsed {
 
     public static Map<String, Article> parsedArticles = new HashMap<>();
     public static TreeSet<ArticleDate> articlesPubDates = new TreeSet(); //by default its ascending order
+    public static TreeMap<String, Article>  temp = new TreeMap<>();
 
 }

@@ -11,9 +11,10 @@ public class KeywordMap {
     public static final Set<String> STOP_WORDS = TextFileReader.readTXTFile("stop_words.txt");
 
     //setting up for a trie built of fthe keywords
-    private static class Node {
-        private HashMap<Character, Node> children = new HashMap<>();
-        private boolean endOfWord = false;
+    public static class Node {
+        public HashMap<Character, Node> children = new HashMap<>();
+        public boolean endOfWord = false;
+
     }
 
     public static Node root = new Node();
@@ -35,17 +36,17 @@ public class KeywordMap {
                 existingKeyword.add(articleUri);
             }
             //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
-            var articleBody = article.getBody();
-            if(articleBody.isEmpty())continue;
-            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
-            for (String wordInBody : bodyNormalized) {
-                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
-                if (!allMappedKeywords.containsKey(wordInBody)) {
-                    allMappedKeywords.put(wordInBody, new TreeSet<>());
-                }
-                var existingKeyword = allMappedKeywords.get(wordInBody);
-                existingKeyword.add(articleUri);
-            }
+//            var articleBody = article.getBody();
+//            if(articleBody.isEmpty())continue;
+//            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
+//            for (String wordInBody : bodyNormalized) {
+//                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
+//                if (!allMappedKeywords.containsKey(wordInBody)) {
+//                    allMappedKeywords.put(wordInBody, new TreeSet<>());
+//                }
+//                var existingKeyword = allMappedKeywords.get(wordInBody);
+//                existingKeyword.add(articleUri);
+//            }
         }
     }
 
@@ -73,15 +74,30 @@ public class KeywordMap {
                 }
             }
             parentNode = existingNode;
-
         }
     }
 
     // this implementation is given to students in the starter code
     public static void insertListToTrie(String[] wordList) {
         for (String string : wordList) {
+            if(string.length()<=1 || !string.chars().allMatch(Character::isLetter) )continue;
             insertWordToTrie(string);
         }
+    }
+
+    public static Node findEndOfPrefixNode(String prefix){
+        if(prefix==null||prefix.trim().isEmpty()) return null;
+        //prefix is pre-normalized
+        Node parentNode = root;
+        Node existingNode = null;
+        for(int i=0;i<prefix.length();i++){
+            existingNode = (parentNode.children.containsKey(prefix.charAt(i))) ? parentNode.children.get(prefix.charAt(i)) : null;
+            if(existingNode==null){
+                return null;
+            }
+            parentNode = existingNode;
+        }
+        return existingNode;
     }
 
 

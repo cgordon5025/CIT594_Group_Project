@@ -38,9 +38,10 @@ public class ProcessorTest {
         // TODO: Write at least 5 test cases with assert statements. All cases must pass
         List<String> expectedTitlesSingleSearch = new ArrayList<>(List.of("Airbnb's Software Patent Rates Your Psychopathy Based On Your Social Media Activity"));
         assertEquals(expectedTitlesSingleSearch, processor.searchArticlesByKeywords(List.of("airbnb")));
-        List<String> expectedTitlesMultiwordSearch = new ArrayList<>(List.of());
+        List<String> expectedTitlesMultiwordSearch = new ArrayList<>(List.of("Twitter board vows legal action after Musk drops bid","Elon Musk could block contact with aliens if they use Twitter, expert warns"));
 
         //TEST 2: 2+ WORD SEARCH
+        assertEquals(expectedTitlesMultiwordSearch,processor.searchArticlesByKeywords(List.of("twitter","and","musk")));
         //TEST 3: empty search PARAMS
 
         //TEST 4: NULL SEARCH PARAMS
@@ -52,6 +53,8 @@ public class ProcessorTest {
     }
     @Test
     void testGetAutocompleteSuggestions(){
+        //"search sometinhg"
+
         fail("not yet implemented");
     }
     @Test

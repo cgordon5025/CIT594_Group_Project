@@ -21,6 +21,7 @@ class SearchCommand implements Command {
         }
 
         // copy arguments into list so we avoid modifying the original array
+        System.out.println(args[0].toString());
         List<String> keywords = Arrays.asList(NormalizeText.normalizeText(args.toString()));
 
         // make call to processor layer

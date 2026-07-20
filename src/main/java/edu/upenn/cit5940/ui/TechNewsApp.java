@@ -1,10 +1,7 @@
 package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.common.dto.Article;
-import edu.upenn.cit5940.datamanagement.ArticleParserStrategy;
-import edu.upenn.cit5940.datamanagement.ArticlesParsed;
-import edu.upenn.cit5940.datamanagement.KeywordMap;
-import edu.upenn.cit5940.datamanagement.ParserStrategyFactory;
+import edu.upenn.cit5940.datamanagement.*;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.io.File;
@@ -65,10 +62,21 @@ public class TechNewsApp {
             parser.parse(dataFile);
             KeywordMap.buildGraphFromArticles();
             //trie is made only using titles
-            KeywordMap.insertListToTrie(ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle).toArray(String[]::new));
+//            KeywordMap.insertListToTrie(
+//                    ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
+//                            .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
+//                            .toArray(String[]::new));
+            var temp =   ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
+                    .flatMap(title->Arrays.stream(title.toLowerCase().split(" ")))
+                    .filter(word-> word.chars().allMatch(Character::isLetter))
+                    .toArray(String[]::new);
+            KeywordMap.insertListToTrie(
+                    ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
+                            .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
+                            .toArray(String[]::new));
             System.out.println(KeywordMap.allMappedKeywords);
-            System.out.println(ArticlesParsed.articlesPubDates);
-            System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
+//            System.out.println(ArticlesParsed.articlesPubDates);
+//            System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
             System.out.println("Architecture initialization complete!\n");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {

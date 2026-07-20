@@ -58,8 +58,27 @@ public class ArticleProcessor {
             return new ArrayList<>(); //return empty since there is nothing
         }
         String normalizedPrefix = prefix.trim().toLowerCase();
+        List<String> builtWords = new ArrayList<>();
+        StringBuilder currentWord = new StringBuilder(normalizedPrefix);
+        KeywordMap.Node endOfPrefixNode = KeywordMap.findEndOfPrefixNode(normalizedPrefix);
+        traverseTrieForWords(endOfPrefixNode,builtWords, currentWord);
 
-        return new ArrayList<String>();
+            //NOTE: NEED TO TRAVERSE TRIE STARTING FROM FINDING PREFIX, AND FINDS THE FIRST 10 (OR LESS IF NONE EXIST) WORDS THAT HAVE THAT PREFIX
+        return builtWords;
+    }
+    private void traverseTrieForWords(KeywordMap.Node node, List<String> finalWords, StringBuilder word){
+        if(node == null) return;
+        if(node.endOfWord){
+            finalWords.add(word.toString());
+        }
+        for(Map.Entry<Character, KeywordMap.Node> nodeEntry: node.children.entrySet()){
+            word.append(nodeEntry.getKey());
+            traverseTrieForWords(nodeEntry.getValue(),finalWords, word);
+            word.deleteCharAt(word.length()-1);
+            if(finalWords.size()>=10){
+                return;
+            }
+        }
     }
 
     public Map<String, Integer> calculateTopTopics(String period) {
@@ -69,6 +88,7 @@ public class ArticleProcessor {
 
     public Map<String, Integer> calculateTrends(String topic, String start, String end) {
         // TODO: Implementation here
+        //NOTE: DO WE CALCULATE VIA WORD FREQ. & TIME PERIOD?
         return new HashMap<String, Integer>();
     }
 
