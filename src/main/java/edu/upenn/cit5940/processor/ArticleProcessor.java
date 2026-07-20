@@ -87,6 +87,7 @@ public class ArticleProcessor {
     public int getTotalArticleCount() {
         return ArticlesParsed.parsedArticles.size();
     }
+
     //helper to find intersecting docs from a search
     private Set<String> findIntersectingDocs(Map<String, Set<String>> intersectingArticles) {
         List<Set<String>> docIds = new ArrayList<>();

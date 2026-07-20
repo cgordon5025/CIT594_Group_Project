@@ -20,8 +20,14 @@ class SearchCommand implements Command {
             return;
         }
 
-        // copy arguments into list so we avoid modifying the original array
-        List<String> keywords = Arrays.asList(NormalizeText.normalizeText(args.toString()));
+        // join string[] args into a single string
+        String rawInputSentence = String.join(" ", args);
+
+        // call the normalizetext method to clean and turn into an array of keywords
+        String[] normalizedArray = NormalizeText.normalizeText(rawInputSentence);
+
+        // wrap into an arraylist
+        List<String> keywords = Arrays.asList(normalizedArray);
 
         // make call to processor layer
         List<String> matchingTitles = processor.searchArticlesByKeywords(keywords);
