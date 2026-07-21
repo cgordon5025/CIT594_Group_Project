@@ -58,9 +58,9 @@ public class KeywordMap {
 
         for (int i = 0; i < normalizedWord.length(); i++) {
             char currChar = normalizedWord.charAt(i);
-            if (!Character.isLetter(currChar)) {
-                continue; //skip numbers and non-alpha chars
-            }
+//            if (!Character.isLetter(currChar)) { //todo: this should not be filtering for nums/specical chars
+//                continue; //skip numbers and non-alpha chars
+//            }
             existingNode = (parentNode.children.containsKey(currChar)) ? parentNode.children.get(currChar) : null;
             if (existingNode == null) { //if its null we add it to the parent as a valid child
                 parentNode.children.put(currChar, new Node());
@@ -80,7 +80,7 @@ public class KeywordMap {
     // this implementation is given to students in the starter code
     public static void insertListToTrie(String[] wordList) {
         for (String string : wordList) {
-            if(string.length()<=1 || !string.chars().allMatch(Character::isLetter) )continue;
+            if(string.length()<=1  )continue;
             insertWordToTrie(string);
         }
     }

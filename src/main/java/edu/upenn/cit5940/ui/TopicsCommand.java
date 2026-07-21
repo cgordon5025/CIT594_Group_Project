@@ -1,8 +1,10 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.common.dto.TopTopicInfo;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 class TopicsCommand implements Command {
@@ -32,18 +34,18 @@ class TopicsCommand implements Command {
         }
 
         // make call to processing layer
-        Map<String, Integer> topTopics = processor.calculateTopTopics(period);
+        List<TopTopicInfo> topTopics = processor.calculateTopTopics(period);
 
         // format output
-        if (topTopics.isEmpty()) {
+        if (topTopics.size()==0) {
             System.out.println("No articles or words found for the specified month.");
         } else {
             System.out.println("==================================================");
             System.out.println("          TOP TOPICS FOR " + period);
             System.out.println("==================================================");
             int rank = 1;
-            for (Map.Entry<String, Integer> entry : topTopics.entrySet()) {
-                System.out.printf("  %2d. %-15s (%d occurrences)%n", rank++, entry.getKey(), entry.getValue());
+            for(TopTopicInfo topic: topTopics){
+                System.out.printf("  %2d. %-15s (%d occurrences)%n", rank++, topic.getTopicName(), topic.getMentionCount());
             }
         }
         System.out.println("==================================================");

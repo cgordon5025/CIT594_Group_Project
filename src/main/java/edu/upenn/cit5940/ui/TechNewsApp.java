@@ -66,17 +66,11 @@ public class TechNewsApp {
 //                    ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
 //                            .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
 //                            .toArray(String[]::new));
-            var temp =   ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
-                    .flatMap(title->Arrays.stream(title.toLowerCase().split(" ")))
-                    .filter(word-> word.chars().allMatch(Character::isLetter))
-                    .toArray(String[]::new);
             KeywordMap.insertListToTrie(
                     ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
                             .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
                             .toArray(String[]::new));
-            System.out.println(KeywordMap.allMappedKeywords);
-//            System.out.println(ArticlesParsed.articlesPubDates);
-//            System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
+                        System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
             System.out.println("Architecture initialization complete!\n");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {

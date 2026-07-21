@@ -1,9 +1,9 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Stream;
 
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.common.dto.TopTopicInfo;
 import edu.upenn.cit5940.datamanagement.ArticleParserStrategy;
 import edu.upenn.cit5940.datamanagement.ArticlesParsed;
 import edu.upenn.cit5940.datamanagement.KeywordMap;
@@ -11,10 +11,6 @@ import edu.upenn.cit5940.datamanagement.ParserStrategyFactory;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,7 +56,30 @@ public class ProcessorTest {
 
     @Test
     void testCalculateTopTopics(){
-        fail("not yet implemented");
+        ArrayList<TopTopicInfo> expectedJanTopics = new ArrayList<>(List.of(new TopTopicInfo("activity",1),
+                new TopTopicInfo("airbnb",1),
+                new TopTopicInfo("announces",1),
+                new TopTopicInfo("avoids",1),
+                new TopTopicInfo("detailed",1),
+                new TopTopicInfo("engine",1),
+                new TopTopicInfo("featured",1),
+                new TopTopicInfo("intel",1),
+                new TopTopicInfo("land",1),
+                new TopTopicInfo("media",1)));
+        assertIterableEquals(
+                expectedJanTopics.stream()
+                        .map(t -> t.getTopicName() + ":" + t.getMentionCount())
+                        .toList(),
+                processor.calculateTopTopics("2020-01").stream()
+                        .map(t -> t.getTopicName() + ":" + t.getMentionCount())
+                        .toList()
+        );//        Map<String, Integer> expectedJanTopics = Stream.of(new Object[][]{
+//                {"your",2},{"activity",1},{"announces",1},{"detailed",1},{"engine",1},
+//                {"based",1},{""}
+//        });
+
+
+//        fail("not yet implemented");
     }
 
     @Test
