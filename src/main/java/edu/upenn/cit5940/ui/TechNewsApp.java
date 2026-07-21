@@ -66,8 +66,10 @@ public class TechNewsApp {
             KeywordMap.buildGraphFromArticles();
             //trie is made only using titles
             KeywordMap.insertListToTrie(ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle).toArray(String[]::new));
-            System.out.println(KeywordMap.allMappedKeywords);
-            System.out.println(ArticlesParsed.articlesPubDates);
+            // initialize treemap for month to topic count
+            KeywordMap.buildTreeFromArticles();
+//            System.out.println(KeywordMap.allMappedKeywords);
+//            System.out.println(ArticlesParsed.sortedArticles);
             System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
             System.out.println("Architecture initialization complete!\n");
 

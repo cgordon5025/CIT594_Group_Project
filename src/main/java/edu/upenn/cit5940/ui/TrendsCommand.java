@@ -1,5 +1,6 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.datamanagement.KeywordMap;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ class TrendsCommand implements Command {
             return;
         }
 
-        String topic = args[0];
+        String topic = args[0].toLowerCase();
         String startPeriod = args[1];
         String endPeriod = args[2];
 
@@ -51,7 +52,8 @@ class TrendsCommand implements Command {
             System.out.println("No trends found for topic in the specified period.");
         } else {
             System.out.println("==================================================");
-            System.out.println(" TREND ANALYSIS FOR TOPIC: " + topic.toUpperCase());
+            System.out.println("MONTHLY FREQUENCY FOR TOPIC: '" + topic.toUpperCase() + "'");
+            System.out.println("BETWEEN " + startPeriod + " AND " + endPeriod);
             System.out.println("==================================================");
 
             // iterate through map of dates/counts

@@ -57,7 +57,7 @@ class CommandModeState implements AppState {
         }
 
         String[] args = new String[parts.length - 1];
-        System.arraycopy(parts, 1, args, 0, args.length);
+        System.arraycopy(parts, 1, args, 0, args.length); // remove the first argument ie the "command"
 
         command.execute(args);
     }
