@@ -19,13 +19,13 @@ class MainMenuState implements AppState {
 
         // handle empty inputs
         if (input.isEmpty()) {
-            System.out.println("Error: Input cannot be empty. Please choose an option.\n");
+            System.out.println("Error: Invalid menu choice. Please enter a choice of valid number (1-4).\n");
             return;
         }
 
         switch (input) {
             case "1":
-                System.out.println("Entering Interactive Mode... (Not yet implemented)\n");
+                app.changeState(new InteractiveModeState());
                 break;
             case "2":
                 app.changeState(new CommandModeState(app));
@@ -38,7 +38,7 @@ class MainMenuState implements AppState {
                 break;
             default:
                 // handle invalid inputs
-                System.out.println("Error: '" + input + "' is an invalid choice. Please enter a number between 1 and 4.\n");
+                System.out.println("Error: '" + input + "' is an invalid choice. Please enter a choice of valid number (1-4).\n");
         }
     }
 }

@@ -8,30 +8,141 @@ public class KeywordMap {
     //MAP W/ KEYWORD AS KEY AND VALUE IS A SET OF URIS, RELATING TO WHICH ARTICLES HAS SPEC. WORDS
     public static Map<String, Set<String>> allMappedKeywords = new HashMap<>();
 
+    // treemap used for trends
+    // key is the month (as a string YYY-MM), value is a map of topics to count
+    public static TreeMap<String, Map<String, Integer>> topicsTree = new TreeMap();
+
     public static final Set<String> STOP_WORDS = TextFileReader.readTXTFile("stop_words.txt");
-    //    RECYCLED FROM HW 6
-    private static String[] normalizeText(String text) {
-        return text.trim().toLowerCase().replaceAll("[^a-z0-9\\s-]", " ")
-                .replaceAll("^-+", "") //remove leading -
-                .replaceAll("-+$", "") //remove trailing -
-                .replaceAll("\\s-+", " ") //remove trailing - after space
-                .replaceAll("-+\\s", " ") //remove leading - b4 space
-                .split(" ");// split at the spaces
+
+    //setting up for a trie built of the keywords
+    public static class Node {
+        public HashMap<Character, Node> children = new HashMap<>();
+        public boolean endOfWord = false;
     }
+
+    public static Node root = new Node();
+
     //recycled from HW 9
     public static void buildGraphFromArticles() {
         for (Article article : ArticlesParsed.parsedArticles.values()) {
             var articleTitle = article.getTitle();
             if (articleTitle.isEmpty()) continue;
-            var titleNormalized = normalizeText(Arrays.toString(articleTitle.split(" ")));
+            var titleNormalized = NormalizeText.normalizeText(Arrays.toString(articleTitle.split(" ")));
 
             var articleUri = article.getUri();
             for (String wordInTitle : titleNormalized) {
-                if (STOP_WORDS.contains(wordInTitle) || wordInTitle.isEmpty()|| wordInTitle.length()==1) continue;
+                if (STOP_WORDS.contains(wordInTitle) || wordInTitle.isEmpty() || wordInTitle.length() == 1) continue;
                 if (!allMappedKeywords.containsKey(wordInTitle)) {
                     allMappedKeywords.put(wordInTitle, new TreeSet<>());
-                }                var existingKeyword = allMappedKeywords.get(wordInTitle);
+                }
+                var existingKeyword = allMappedKeywords.get(wordInTitle);
                 existingKeyword.add(articleUri);
+            }
+            //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
+//            var articleBody = article.getBody();
+//            if(articleBody.isEmpty())continue;
+//            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
+//            for (String wordInBody : bodyNormalized) {
+//                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
+//                if (!allMappedKeywords.containsKey(wordInBody)) {
+//                    allMappedKeywords.put(wordInBody, new TreeSet<>());
+//                }
+//                var existingKeyword = allMappedKeywords.get(wordInBody);
+//                existingKeyword.add(articleUri);
+//            }
+        }
+    }
+
+    public static void insertWordToTrie(String word) {
+        if (word == null || word.trim().isEmpty()) return; //ignore empty/null words
+        String normalizedWord = word.trim().toLowerCase();
+        Node parentNode = root;
+        Node existingNode = null;
+
+        for (int i = 0; i < normalizedWord.length(); i++) {
+            char currChar = normalizedWord.charAt(i);
+//            if (!Character.isLetter(currChar)) { //todo: this should not be filtering for nums/specical chars
+//                continue; //skip numbers and non-alpha chars
+//            }
+            existingNode = (parentNode.children.containsKey(currChar)) ? parentNode.children.get(currChar) : null;
+            if (existingNode == null) { //if its null we add it to the parent as a valid child
+                parentNode.children.put(currChar, new Node());
+                existingNode = parentNode.children.get(currChar);
+                if (i == normalizedWord.length() - 1) {
+                    existingNode.endOfWord = true;
+                }
+            } else {
+                if (i == normalizedWord.length() - 1) {
+                    existingNode.endOfWord = true; //word is a substring of diff so let's mark theree is an end here
+                }
+            }
+            parentNode = existingNode;
+        }
+    }
+
+    // this implementation is given to students in the starter code
+    public static void insertListToTrie(String[] wordList) {
+        for (String string : wordList) {
+            if(string.length()<=1  )continue;
+            insertWordToTrie(string);
+        }
+    }
+    public static Node findEndOfPrefixNode(String prefix){
+        if(prefix==null||prefix.trim().isEmpty()) return null;
+        //prefix is pre-normalized
+        Node parentNode = root;
+        Node existingNode = null;
+        for(int i=0;i<prefix.length();i++){
+            existingNode = (parentNode.children.containsKey(prefix.charAt(i))) ? parentNode.children.get(prefix.charAt(i)) : null;
+            if(existingNode==null){
+                return null;
+            }
+            parentNode = existingNode;
+        }
+        return existingNode;
+    }
+    public static void buildTreeFromArticles() {
+        // date format must match YYYY-MM
+        // months must be 01 through 12. years must be exactly 4 digits
+        String dateRegex = "^\\d{4}-(0[1-9]|1[0-2])$";
+
+        for (Article article : ArticlesParsed.parsedArticles.values()) {
+            var articleDate = article.getDate();
+            if (articleDate.isEmpty()) continue;
+            String dateNormalized = articleDate.substring(0, 7); // slice out the YYYY-MM
+
+
+
+
+            if (!dateNormalized.matches(dateRegex)) {
+                continue;
+            }
+
+            // add the month to the treemap only if it doesn't exist yet
+            topicsTree.putIfAbsent(dateNormalized, new HashMap());
+
+            var articleTitle = article.getTitle();
+            if (articleTitle.isEmpty()) continue;
+            var titleNormalized = NormalizeText.normalizeText(Arrays.toString(articleTitle.split(" ")));
+
+            for (String wordInTitle : titleNormalized) {
+                if (STOP_WORDS.contains(wordInTitle) || wordInTitle.isEmpty() || wordInTitle.length() == 1) continue;
+                Map<String, Integer> wordMap = topicsTree.get(dateNormalized);
+                // if the wordMap doesn't have the word, default count to 0 and add 1
+                // otherwise take the existing count and add 1
+                wordMap.put(wordInTitle, wordMap.getOrDefault(wordInTitle, 0) + 1);
+            }
+
+            //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
+            var articleBody = article.getBody();
+            if(articleBody.isEmpty())continue;
+            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
+            for (String wordInBody : bodyNormalized) {
+                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
+                Map<String, Integer> wordMap = topicsTree.get(dateNormalized);
+                // if the wordMap doesn't have the word, default count to 0 and add 1
+                // otherwise take the existing count and add 1
+                wordMap.put(wordInBody, wordMap.getOrDefault(wordInBody, 0) + 1);
             }
         }
     }

@@ -6,7 +6,7 @@ import java.util.*;
  * @author nanzheng
  */
 
-public class Article {
+public class Article implements Comparable<Article> {
 
     private String uri;
     private String date;
@@ -63,5 +63,17 @@ public class Article {
     }
     public void setBody(String body) {
         this.body = body;
+    }
+
+    @Override
+    public int compareTo(Article other) {
+        // sort articles naturally by date
+        int dateCompare = this.getDate().compareTo(other.getDate());
+        if (dateCompare != 0) {
+            return dateCompare;
+        }
+
+        // if dates match, sort by title
+        return this.getTitle().compareTo(other.getTitle());
     }
 }
