@@ -62,15 +62,13 @@ public class TechNewsApp {
             parser.parse(dataFile);
             KeywordMap.buildGraphFromArticles();
             //trie is made only using titles
-//            KeywordMap.insertListToTrie(
-//                    ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
-//                            .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
-//                            .toArray(String[]::new));
             KeywordMap.insertListToTrie(
                     ArticlesParsed.parsedArticles.values().stream().map(Article::getTitle)
-                            .flatMap(title->Arrays.stream(NormalizeText.normalizeText(title)))
+                            .flatMap(title -> Arrays.stream(NormalizeText.normalizeText(title)))
                             .toArray(String[]::new));
-                        System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
+            // initialize treemap for month to topic count
+            KeywordMap.buildTreeFromArticles();
+            System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
             System.out.println("Architecture initialization complete!\n");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {

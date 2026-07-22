@@ -147,8 +147,33 @@ public class ArticleProcessor {
 
     public Map<String, Integer> calculateTrends(String topic, String start, String end) {
         // TODO: Implementation here
-        //NOTE: DO WE CALCULATE VIA WORD FREQ. & TIME PERIOD?
-        return new HashMap<String, Integer>();
+
+        // map to store output of month to count
+        Map<String, Integer> monthlyCounts = new TreeMap<>();
+
+        // fill map with months and initialize a count of 0
+        String currentMonth = start;
+        while (currentMonth.compareTo(end) <= 0) {
+            monthlyCounts.put(currentMonth, 0);
+            currentMonth = incrementMonth(currentMonth);
+        }
+
+        // create a submap of the treemap from start month to end month (inclusive)
+        Map<String, Map<String, Integer>> relevantMonths =
+                KeywordMap.topicsTree.subMap(start, end + Character.MAX_VALUE); // make the end month inclusive
+
+        // iterate over submap and update the monthlyCounts map
+        for (Map.Entry<String, Map<String, Integer>> entry : relevantMonths.entrySet()) {
+            String monthKey = entry.getKey();
+            Map<String, Integer> topicCount = entry.getValue();
+
+            // retrieve the word cound
+            if (topicCount != null && topicCount.containsKey(topic)) {
+                int count = topicCount.get(topic);
+                monthlyCounts.put(monthKey, count);
+            }
+        }
+        return monthlyCounts;
     }
 
     public List<String> getArticlesByDateRange(String start, String end) {
@@ -195,5 +220,22 @@ public class ArticleProcessor {
             intersection.retainAll(docIds.get(i)); //this performs the intersection for use
         }
         return intersection;
+    }
+
+    /**
+     * Helper method to increment months as a string (YYYY-MM)
+     * @param yearMonth as a string
+     * @return a string representing the next month
+     */
+    private String incrementMonth(String yearMonth) {
+        int year = Integer.parseInt(yearMonth.substring(0, 4));
+        int month = Integer.parseInt(yearMonth.substring(5, 7));
+        month++;
+        // handle december -> january transition
+        if (month > 12) {
+            month = 1;
+            year++;
+        }
+        return String.format("%04d-%02d", year, month); // force format to be YYYY-MM
     }
 }

@@ -122,13 +122,6 @@ public class InteractiveModeState implements AppState {
     private void waitForEnter(Scanner scanner) {
         System.out.print("\nPress ENTER to return to the main Interactive Mode menu...");
 
-        while (true) {
-            String line = scanner.nextLine(); // consume any previously entered text
-            if (line.isEmpty() || line.trim().isEmpty()) {
-                break; // break out of loop when an enter is pressed
-            }
-        }
-
-        System.out.println();
+        scanner.nextLine();
     }
 }
