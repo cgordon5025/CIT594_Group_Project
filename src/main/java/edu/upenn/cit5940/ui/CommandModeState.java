@@ -1,5 +1,6 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.Map;
 
 class CommandModeState implements AppState {
     private final Map<String, Command> commands = new HashMap<>();
-
+    Logger logger = Logger.getInstance();
     // Accept the app instance to tap into the root-initialized components
     public CommandModeState(TechNewsApp app) {
         System.out.println("==================================================");
@@ -16,7 +17,6 @@ class CommandModeState implements AppState {
         System.out.println("==================================================");
         System.out.println("Enter commands directly. Type 'help' for available commands.");
         System.out.println("Type 'menu' to return to the main menu.");
-
         // Grab the single, root-level processor instance
         ArticleProcessor processor = app.getProcessor();
 
@@ -52,6 +52,8 @@ class CommandModeState implements AppState {
 
         Command command = commands.get(cmdKeyword);
         if (command == null) {
+            logger.LogInformation(String.format( "Command mode: Unknown command <$s>", cmdKeyword), Logger.LogStatus.ERROR);
+
             System.out.println("Error: Unknown command '" + cmdKeyword + "'. Type 'help' for a list of commands.");
             return;
         }

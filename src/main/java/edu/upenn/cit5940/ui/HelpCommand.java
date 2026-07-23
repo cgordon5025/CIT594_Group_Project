@@ -1,5 +1,7 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.logging.Logger;
+
 class HelpCommand implements Command {
     @Override
     public void execute(String[] args) {
