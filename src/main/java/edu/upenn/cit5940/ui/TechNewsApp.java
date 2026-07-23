@@ -2,6 +2,7 @@ package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.*;
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.io.File;
@@ -16,6 +17,9 @@ public class TechNewsApp {
     public TechNewsApp(String[] args) {
         System.out.println("=== Tech News Search Engine ===");
         System.out.println("Initializing n-tier architecture...");
+        Logger logger = Logger.getInstance();
+
+        logger.LogInformation("Application Starting", Logger.LogStatus.INFO);
 
         // default file names
         var dataFilePath = "articles.csv";
@@ -29,7 +33,6 @@ public class TechNewsApp {
             // otherwise check data subfolder
             File rootData = new File("articles.csv");
             File subfolderData = new File("data/articles.csv");
-
             if (!rootData.exists() && subfolderData.exists()) {
                 dataFilePath = subfolderData.getPath();
             }
@@ -69,6 +72,8 @@ public class TechNewsApp {
             // initialize treemap for month to topic count
             KeywordMap.buildTreeFromArticles();
             System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
+            logger.LogInformation(String.format("Loaded %d articles from %s",ArticlesParsed.parsedArticles.size(),dataFilePath), Logger.LogStatus.INFO);
+
             System.out.println("Architecture initialization complete!\n");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {
