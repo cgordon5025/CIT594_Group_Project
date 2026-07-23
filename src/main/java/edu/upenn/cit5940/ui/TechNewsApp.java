@@ -17,9 +17,7 @@ public class TechNewsApp {
     public TechNewsApp(String[] args) {
         System.out.println("=== Tech News Search Engine ===");
         System.out.println("Initializing n-tier architecture...");
-        Logger logger = Logger.getInstance();
 
-        logger.LogInformation("Application Starting", Logger.LogStatus.INFO);
 
         // default file names
         var dataFilePath = "articles.csv";
@@ -52,7 +50,9 @@ public class TechNewsApp {
 
         System.out.println("Loading articles from: " + dataFilePath);
         System.out.println("Log output to: " + logFilePath);
-
+        Logger logger = Logger.getInstance();
+        logger.initLogger(logFilePath);
+        logger.LogInformation("Application Starting", Logger.LogStatus.INFO);
 
         // figure out which parsing strategy to use
         try {

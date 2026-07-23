@@ -13,11 +13,18 @@ public class Logger {
     private static final Logger logger = new Logger();
 
     //preventing external init
-    private Logger(){
-        try {
-            out = new FileWriter("tech_news_search.log",true);
+//    private Logger(){
+//        try {
+//            out = new FileWriter("tech_news_search.log",true);
+//        }catch(Exception e){
+//
+//        }
+//    }
+    public void initLogger(String filePath){
+        try{
+            out = new FileWriter(filePath,true);
         }catch(Exception e){
-
+            System.out.println("Error int logger");
         }
     }
     public static Logger getInstance(){
@@ -28,13 +35,17 @@ public class Logger {
         var time = sdf.format(System.currentTimeMillis());
         try{
             out.write("["+time+"] "+logStatus+" "+action +"\n");
-        }catch(Exception e){}finally {
-            try{
-                out.flush();
-                out.close();}catch(Exception e){}
-
+            out.flush();
+        }catch(Exception e){
+            System.out.println("error");
         }
-        System.out.println();
+    }
+    public void CloseLogger(){
+        try{
+        out.close();
+        }catch(Exception e){
+            System.out.println();
+        }
     }
 
 

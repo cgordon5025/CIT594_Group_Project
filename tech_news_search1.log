@@ -1,0 +1,7 @@
+[2026-07-23 19:26:35.745] INFO Application Starting
+[2026-07-23 19:26:35.976] INFO Loaded 100 articles from articles_small.json
+[2026-07-23 19:26:39.730] INFO Entering Interactive Mode
+[2026-07-23 19:26:46.595] INFO Prefix
+[2026-07-23 19:26:49.139] INFO User auto-complete with prefix <appl>
+[2026-07-23 19:27:02.689] INFO Return to Main Menu
+[2026-07-23 19:27:04.687] INFO Exiting app

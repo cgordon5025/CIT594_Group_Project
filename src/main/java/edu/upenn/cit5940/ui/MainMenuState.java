@@ -42,6 +42,7 @@ class MainMenuState implements AppState {
                 break;
             case "4":
                 logger.LogInformation("Exiting app", Logger.LogStatus.INFO);
+                logger.CloseLogger();
                 app.exit();
                 break;
             default:
