@@ -4,7 +4,7 @@ import edu.upenn.cit5940.logging.Logger;
 
 import java.util.Scanner;
 
-class MainMenuState implements AppState {
+public class MainMenuState implements AppState {
     @Override
     public void handleInput(TechNewsApp app, Scanner scanner) {
         System.out.println("==================================================");

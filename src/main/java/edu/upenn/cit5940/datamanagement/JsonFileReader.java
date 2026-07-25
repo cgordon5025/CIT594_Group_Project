@@ -36,12 +36,11 @@ public class JsonFileReader {
      * @throws CSVFormatException when the CSV file is formatted incorrectly.
      */
     public void readAllArticles(String fileName) throws IOException, CSVFormatException {
-        // TODO: Add code here
+
         try {
             //reader has been init in the constructor
-            //note its a char reader (extension of buffered reader)
+            //note it's a char reader (extension of buffered reader)
             //Generally speaking we want to split at the comma
-            //
             var temp = Files.readAllBytes(Paths.get(fileName));
             ObjectMapper objectMapper = new ObjectMapper();
             var other = objectMapper.readTree(temp);

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ProcessArticleRecord {
     public static void processRecord(List<String> rec) throws CSVFormatException {
-        // TODO: Add code here
+
         if (rec.getFirst() == null || rec.getFirst().isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -14,8 +14,9 @@ public class ProcessArticleRecord {
             return;
         }
         Article newArticle = new Article(rec);
+
+        // fill the HashMap and TreeSet of Articles
         ArticlesParsed.parsedArticles.put(newArticle.getUri(), newArticle);
-//        ArticlesParsed.articlesPubDates.add(new ArticlesParsed.ArticleDate(newArticle.getDate(), newArticle.getTitle()));
         ArticlesParsed.sortedArticles.add(newArticle);
     }
 }
