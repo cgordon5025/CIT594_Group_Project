@@ -15,8 +15,7 @@ Download __CIT594_Group_Project.zip__ and unzip it. Save it to a folder, and ens
 
 __Step 3:__
 Navigate to the application’s root from the command line by typing in
-```cd```
-Then, click and drag your folder to the terminal window to pull in the file path automatically. Press enter.
+```cd <path_to_root>```. Alternatively, after typing ```cd``` on Mac you can click and drag your folder to the terminal window to pull in the file path automatically, or windows copy the path to the root file and paste it in the terminal. Press enter.
 
 __Step 4:__ We will now compile the program. Type the following command into the command line
 
@@ -26,7 +25,7 @@ You will see a **BUILD SUCCESS** message to indicate that the program has compil
 
 ### Execution
 First ensure that it has been compiled successfully and that you are in the application’s root. Navigate to the application’s root from the command line by typing in
-```cd <path_to_root```. Alternatively, on Mac you can click and drag your folder to the terminal window to pull in the file path automatically, or windows copy the path to the root file and paste it in the terminal. Press enter.
+```cd <path_to_root>```. Alternatively, after typing ```cd``` on Mac you can click and drag your folder to the terminal window to pull in the file path automatically, or windows copy the path to the root file and paste it in the terminal. Press enter.
 
 The Tech News Application takes up to **two optional** arguments that specify the source of the articles and the output file for the event logging. There are three options to launch the application.
 
@@ -189,7 +188,7 @@ logger.LogInformation(String.format("Loaded %d articles from %s",ArticlesParsed.
 Later use in main menu State
 logger.LogInformation("Invalid Menu option provided", Logger.LogStatus.ERROR);
 
-Logger Singleton class
+__Logger Singleton class__
 ```
 private FileWriter out;
    public enum LogStatus{
