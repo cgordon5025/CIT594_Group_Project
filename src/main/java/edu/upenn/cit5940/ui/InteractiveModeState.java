@@ -1,8 +1,11 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.logging.Logger;
+
 import java.util.Scanner;
 
 public class InteractiveModeState implements AppState {
+    Logger logger = Logger.getInstance();
     @Override
     public void handleInput(TechNewsApp app, Scanner scanner) {
         System.out.println("==================================================");
@@ -34,6 +37,7 @@ public class InteractiveModeState implements AppState {
 
         switch (choice) {
             case "1": // Search
+                logger.LogInformation("Keyword Search", Logger.LogStatus.INFO);
                 System.out.print("Enter search keyword(s) separated by spaces: ");
                 String searchInput = scanner.nextLine().trim();
                 if (!searchInput.isEmpty()) {
@@ -41,12 +45,15 @@ public class InteractiveModeState implements AppState {
                     String[] searchArgs = searchInput.split("\\s+");
                     new SearchCommand(processor).execute(searchArgs);
                 } else {
+                    logger.LogInformation("Keyword Search empty input", Logger.LogStatus.ERROR);
                     System.out.println("Error: Keywords cannot be empty.");
                 }
                 waitForEnter(scanner);
                 break;
 
             case "2": // Autocomplete
+                logger.LogInformation("Prefix", Logger.LogStatus.INFO);
+
                 System.out.print("Enter word prefix to autocomplete: ");
                 String prefixInput = scanner.nextLine().trim();
                 // build single element arg array and call autocomplete command
@@ -56,6 +63,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "3": // topics
+                logger.LogInformation("Topic Search", Logger.LogStatus.INFO);
+
                 System.out.print("Enter period (YYYY-MM): ");
                 String periodInput = scanner.nextLine().trim();
                 String[] topicsArgs = { periodInput };
@@ -64,6 +73,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "4": // trends
+                logger.LogInformation("Trends Search", Logger.LogStatus.INFO);
+
                 System.out.print("Enter topic word: ");
                 String trendTopic = scanner.nextLine().trim();
                 System.out.print("Enter start period (YYYY-MM): ");
@@ -78,6 +89,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "5": // articles
+                logger.LogInformation("Articles Search", Logger.LogStatus.INFO);
+
                 System.out.print("Enter start date (YYYY-MM-DD): ");
                 String articlesStart = scanner.nextLine().trim();
                 System.out.print("Enter end date (YYYY-MM-DD): ");
@@ -90,6 +103,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "6": // article
+                logger.LogInformation("Get Unique Article by URI", Logger.LogStatus.INFO);
+
                 System.out.print("Enter specific unique Article ID (URI): ");
                 String articleId = scanner.nextLine().trim();
 
@@ -100,6 +115,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "7": // stats
+                logger.LogInformation("Article Stats", Logger.LogStatus.INFO);
+
                 // stats does not require any arguments
                 String[] statsArgs = {};
                 new StatsCommand(processor).execute(statsArgs);
@@ -107,6 +124,8 @@ public class InteractiveModeState implements AppState {
                 break;
 
             case "8": // return to main menu
+                logger.LogInformation("Return to Main Menu", Logger.LogStatus.INFO);
+
                 System.out.println("Returning to Main Menu...\n");
                 app.changeState(new MainMenuState());
                 break;

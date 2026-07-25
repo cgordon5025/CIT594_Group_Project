@@ -3,6 +3,7 @@ package edu.upenn.cit5940.datamanagement;
 import java.io.*;
 import java.util.*;
 import edu.upenn.cit5940.common.dto.*;
+import edu.upenn.cit5940.logging.Logger;
 
 
 public class CSVParserStrategy implements ArticleParserStrategy {
@@ -23,7 +24,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
             readAllArticles(characterReader);
         }
     }
-
+    int lineNum = 1;
     /**
      * Reads the entire CSV stream and parses it into a map of Articles.
      *
@@ -39,7 +40,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
 
         // kick off the reading with the start_of_field state
         STATES state = STATES.START_OF_FIELD;
-
+        Logger logger = Logger.getInstance();
         int input;
 
         while ((input = reader.read()) != -1) {
@@ -130,6 +131,7 @@ public class CSVParserStrategy implements ArticleParserStrategy {
                             ProcessArticleRecord.processRecord(currentRecordFields);
                             currentRecordFields.clear();
                             state = STATES.START_OF_FIELD;
+                            lineNum++; //increment
                         }
                         default -> throw new CSVFormatException();
                     }
@@ -139,9 +141,12 @@ public class CSVParserStrategy implements ArticleParserStrategy {
 
         // if EOF encounters CR
         if (state == STATES.CR_AT_RECORD_END) {
+            logger.LogInformation(String.format("Failed to parse record at line <%d>",lineNum), Logger.LogStatus.ERROR);
             throw new CSVFormatException();
+
             // if we encounter an unclosed quote at end of stream
         } else if (state == STATES.QUOTED_FIELD) {
+            logger.LogInformation(String.format("Failed to parse record at line <%d>, due to Unclosed Quote",lineNum), Logger.LogStatus.ERROR);
             throw new CSVFormatException();
             // handle end of CSV in case there are no LF
         } else if (state == STATES.NORMAL_FIELD || state == STATES.QUOTE_IN_QUOTED_FIELD) {

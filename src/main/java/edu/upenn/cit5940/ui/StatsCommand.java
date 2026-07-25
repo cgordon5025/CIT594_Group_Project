@@ -1,10 +1,12 @@
 package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 class StatsCommand implements Command {
     private final ArticleProcessor processor;
+    Logger logger = Logger.getInstance();
 
     public StatsCommand(ArticleProcessor processor) {
         this.processor = processor;
@@ -13,9 +15,12 @@ class StatsCommand implements Command {
     public void execute(String[] args) {
         // validate there are no arguments
         if (args.length > 0) {
+            logger.LogInformation(String.format("Provided arguments for 'stats' command"), Logger.LogStatus.ERROR);
+
             System.out.println("Error: The 'stats' command does not accept arguments. Usage: stats");
             return;
         }
+        logger.LogInformation(String.format("Getting Database statistics"), Logger.LogStatus.INFO);
 
         // make call to processor layer
         int totalArticles = processor.getTotalArticleCount();

@@ -29,7 +29,7 @@ public class ArticleProcessor {
     }
 
     public List<String> searchArticlesByKeywords(List<String> keywords) {
-        // TODO: Implementation here
+
         Set<String> articleIds = new HashSet<>();
         Map<String, Set<String>> intersectingArticles = new HashMap<>();
         if (keywords == null || keywords.isEmpty() || ArticlesParsed.parsedArticles.size() == 0) {
@@ -58,7 +58,7 @@ public class ArticleProcessor {
     }
 
     public List<String> getAutocompleteSuggestions(String prefix) {
-        // TODO: Implementation here
+
         if (prefix == null || prefix.trim().isEmpty()) {
             return new ArrayList<>(); //return empty since there is nothing
         }
@@ -146,7 +146,6 @@ public class ArticleProcessor {
     }
 
     public Map<String, Integer> calculateTrends(String topic, String start, String end) {
-        // TODO: Implementation here
 
         // map to store output of month to count
         Map<String, Integer> monthlyCounts = new TreeMap<>();
@@ -177,7 +176,7 @@ public class ArticleProcessor {
     }
 
     public List<String> getArticlesByDateRange(String start, String end) {
-        // TODO: Implementation here
+
         //need to get the closest start and end dates that exist in the set
         return ArticlesParsed.sortedArticles.stream()
                 // filter articles based on inclusive start and end dates

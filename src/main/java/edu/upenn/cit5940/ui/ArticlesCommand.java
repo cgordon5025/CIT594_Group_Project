@@ -1,5 +1,6 @@
 package edu.upenn.cit5940.ui;
 
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.time.format.DateTimeFormatter;
@@ -9,7 +10,6 @@ import java.util.List;
 
 class ArticlesCommand implements Command {
     private final ArticleProcessor processor;
-
     // strict datetimeformatter to validate proper date entries
     private static final DateTimeFormatter STRICT_FORMATTER = DateTimeFormatter
             .ofPattern("uuuu-MM-dd")
@@ -18,26 +18,32 @@ class ArticlesCommand implements Command {
     public ArticlesCommand(ArticleProcessor processor) {
         this.processor = processor;
     }
+    Logger logger = Logger.getInstance();
 
     @Override
     public void execute(String[] args) {
 
         // validate argument count = 2
         if (args.length != 2) {
+            logger.LogInformation(String.format("Invalid arguments <start_date> <end_date>"), Logger.LogStatus.ERROR);
+
             System.out.println("Error: Invalid arguments. Usage: articles <start_date> <end_date>");
             return;
         }
 
         String startDate = args[0];
         String endDate = args[1];
+        logger.LogInformation(String.format("User search for articles between start_date <%s> end_date <%s>", startDate, endDate), Logger.LogStatus.INFO);
 
         // startDate and endDate must match YYYY-MM-DD
         String dateRegex = "^\\d{4}-\\d{2}-\\d{2}$";
         if (!startDate.matches(dateRegex)) {
+            logger.LogInformation(String.format("Invalid start date syntax %s", startDate), Logger.LogStatus.ERROR);
             System.out.println("Error: Invalid start date syntax '" + startDate + "'. Must be YYYY-MM-DD.");
             return;
         }
         if (!endDate.matches(dateRegex)) {
+            logger.LogInformation(String.format("Invalid end date syntax %s",endDate), Logger.LogStatus.ERROR);
             System.out.println("Error: Invalid end date syntax '" + endDate + "'. Must be YYYY-MM-DD.");
             return;
         }
@@ -46,6 +52,7 @@ class ArticlesCommand implements Command {
         try {
             STRICT_FORMATTER.parse(startDate);
         } catch (DateTimeParseException e) {
+            logger.LogInformation(String.format("Requested Start Date is not a proper calendar date %s", startDate), Logger.LogStatus.ERROR);
             System.out.println("Error: Start date '" + startDate + "' is not a proper calendar date.");
             return;
         }
@@ -54,12 +61,15 @@ class ArticlesCommand implements Command {
         try {
             STRICT_FORMATTER.parse(endDate);
         } catch (DateTimeParseException e) {
+            logger.LogInformation(String.format("Requested End Date is not a proper calendar date %s", endDate), Logger.LogStatus.ERROR);
             System.out.println("Error: End date '" + endDate + "' is not a proper calendar date.");
             return;
         }
 
         // startDate must be before endDate
         if (startDate.compareTo(endDate) > 0) {
+            logger.LogInformation(String.format("Start_date  <%s> cannot be after end_date <%s>",startDate, endDate), Logger.LogStatus.ERROR);
+
             System.out.println("Error: Start date (" + startDate + ") cannot be after end date (" + endDate + ").");
             return;
         }
@@ -71,6 +81,7 @@ class ArticlesCommand implements Command {
         if (titles.isEmpty()) {
             System.out.println("No articles found.");
         } else {
+
             System.out.println("=============================================================");
             System.out.println("ARTICLES PUBLISHED BETWEEN " + startDate + " AND " + endDate);
             System.out.println("=============================================================");

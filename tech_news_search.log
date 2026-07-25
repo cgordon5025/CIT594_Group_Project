@@ -1,0 +1,39 @@
+[2026-07-22 16:05:22.486] INFO Success
+[2026-07-22 16:08:26.312] INFO Application Starting
+[2026-07-23 19:07:43.569] INFO Application Starting
+[2026-07-23 19:11:36.799] INFO Application Starting
+[2026-07-23 19:16:01.307] INFO Application Starting
+[2026-07-23 19:21:10.653] INFO Application Starting
+[2026-07-23 19:21:10.906] INFO Loaded 100 articles from articles_small.json
+[2026-07-23 19:21:31.666] INFO Entering Interactive Mode
+[2026-07-24 11:20:52.795] INFO Application Starting
+[2026-07-24 11:22:05.343] INFO Exiting app
+[2026-07-25 17:51:30.765] INFO Application Starting
+[2026-07-25 17:51:43.575] INFO Loaded <99986> articles from <data/articles.csv>
+[2026-07-25 17:52:19.246] INFO Application Starting
+[2026-07-25 17:52:35.615] INFO Application Starting
+[2026-07-25 17:52:43.927] INFO Loaded <99986> articles from <data/articles.csv>
+[2026-07-25 17:52:47.674] INFO Application Starting
+[2026-07-25 17:53:15.487] INFO Loaded <99986> articles from <data/articles.csv>
+[2026-07-25 17:53:26.445] INFO Entering Interactive Mode
+[2026-07-25 17:53:27.891] INFO Keyword Search
+[2026-07-25 17:53:30.145] INFO User search query: <[apple]>
+[2026-07-25 17:53:45.724] INFO Prefix
+[2026-07-25 17:53:47.682] INFO User auto-complete with prefix <app>
+[2026-07-25 17:53:49.788] INFO Keyword Search
+[2026-07-25 17:53:52.969] INFO User search query: <[apple]>
+[2026-07-25 17:53:59.089] INFO Keyword Search
+[2026-07-25 17:54:02.272] INFO User search query: <[apple]>
+[2026-07-25 17:54:09.883] INFO Keyword Search
+[2026-07-25 17:54:17.299] INFO User search query: <[musk]>
+[2026-07-25 17:54:22.164] INFO Keyword Search
+[2026-07-25 17:54:23.463] INFO User search query: <[apple]>
+[2026-07-25 17:54:31.509] INFO Return to Main Menu
+[2026-07-25 17:54:34.026] INFO Entering Command Mode
+[2026-07-25 17:54:59.092] INFO User search query: <[apple]>
+[2026-07-25 17:55:14.530] INFO Application Starting
+[2026-07-25 17:55:22.595] INFO Loaded <99986> articles from <data/articles.csv>
+[2026-07-25 17:55:24.824] INFO Entering Command Mode
+[2026-07-25 17:55:33.418] INFO User search query: <[apple]>
+[2026-07-25 17:55:50.832] INFO Entering Help Mode
+[2026-07-25 17:55:54.606] INFO Exiting app

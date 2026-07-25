@@ -1,6 +1,7 @@
 package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.datamanagement.NormalizeText;
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.util.Arrays;
@@ -8,7 +9,7 @@ import java.util.List;
 
 class SearchCommand implements Command {
     private final ArticleProcessor processor;
-
+    Logger logger = Logger.getInstance();
     public SearchCommand(ArticleProcessor processor) {
         this.processor = processor;
     }
@@ -16,6 +17,7 @@ class SearchCommand implements Command {
     public void execute(String[] args) {
         // must have at least one argument
         if (args.length == 0) {
+            logger.LogInformation(String.format("Invalid argument for keyword search"), Logger.LogStatus.ERROR);
             System.out.println("Error: Missing search keywords. Usage: search <keyword> <keyword(s)>");
             return;
         }
@@ -28,6 +30,7 @@ class SearchCommand implements Command {
 
         // wrap into an arraylist
         List<String> keywords = Arrays.asList(normalizedArray);
+        logger.LogInformation(String.format("User search query: <%s>", keywords.toString()), Logger.LogStatus.INFO);
 
         // make call to processor layer
         List<String> matchingTitles = processor.searchArticlesByKeywords(keywords);

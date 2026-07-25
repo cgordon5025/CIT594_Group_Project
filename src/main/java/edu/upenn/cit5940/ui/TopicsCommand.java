@@ -1,6 +1,7 @@
 package edu.upenn.cit5940.ui;
 
 import edu.upenn.cit5940.common.dto.TopTopicInfo;
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.processor.ArticleProcessor;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 class TopicsCommand implements Command {
     private final ArticleProcessor processor;
-
+Logger logger = Logger.getInstance();
     public TopicsCommand(ArticleProcessor processor) {
         this.processor = processor;
     }
@@ -19,6 +20,7 @@ class TopicsCommand implements Command {
 
         // validate that there is only one argument
         if (args.length != 1) {
+            logger.LogInformation(String.format("Missing period parameter. Usage: topics <period>"), Logger.LogStatus.ERROR);
             System.out.println("Error: Missing period parameter. Usage: topics <period>");
             return;
         }
@@ -27,8 +29,10 @@ class TopicsCommand implements Command {
 
         // period must match YYYY-MM
         String periodRegex = "^\\d{4}-(0[1-9]|1[0-2])$";
+        logger.LogInformation(String.format("User search topics in period <$s>",period), Logger.LogStatus.INFO);
 
         if (!period.matches(periodRegex)) {
+            logger.LogInformation(String.format("Invalid period format <%s>",period), Logger.LogStatus.ERROR);
             System.out.println("Error: Invalid period format '" + period + "'. Must be YYYY-MM (e.g., 2024-04).");
             return;
         }
