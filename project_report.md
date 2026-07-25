@@ -69,7 +69,163 @@ __Tier 3:__ Presentation/User Interface - edu.upenn.cit5940.ui
 Our top layer handles the user interface functions and features. It manages the main application loop through the AppState interface (InterfaceModeState, CommandModeState, HelpModeState, MainMenuState). We also use a command design pattern through the Command interface to handle individual commands in the Interface and Command modes. Each command has its own class where the input is handled and validated, a call is made to the middle processor layer, and then the output is formatted for display.
 
 ### Data Strucutres & Refactoring
+__Refactor of InvertedIndex to HashMap:__ As our ArticleParser maps the Articles to a HashMap, it would take both much more time and memory to create an InvertedIndex tree from the title, in order to perform both the Search and Autocomplete functions, we wanted to leverage what already existed.
+Additionally, refactoring the InvertedIndex from a Tree to a HashMap, allows us to use .contains() instead of traversing the tree, which brings the average time complexity from O(logT) to O(1), and worst case remains the same.
+Original implementation of Searching an invertedIndex for a word
+```
+for (String word : normalizedText) {
+           if (STOP_WORDS.contains(word) || word.isEmpty()) {
+               continue;
+           }
+           var existingNode = searchTreeForNode(root, word);
+           if (existingNode != null&& existingNode.keyWord.equals(word)) {
+                if (lookingForIntersection) {
+                   intersectingNodes.add(existingNode);
+              }
+                   _docIds.addAll(existingNode.documentIDs);
+           }else{
+               _docIds = new HashSet<>();
+               break; //there is a non-existent word, definitely there will be no match
+           }
+       }
+```
+New Implementation
+```
+if (KeywordMap.STOP_WORDS.contains(word) || word.isEmpty()) {
+   continue;
+}
+if (KeywordMap.allMappedKeywords.containsKey(word)) {
+   intersectingArticles.put(word, KeywordMap.allMappedKeywords.get(word));
+   articleIds.addAll(KeywordMap.allMappedKeywords.get(word));
+}
+```
+
+__Data Structure Decisions and Refactoring Continued:__ Our functions for Search and AutoComplete (recommendations)  we refactored from Assignments 6 and 8, respectively. Additionally, a shared tool, normalizeText, from Assignment 6, was adapted to be used across the application to provide consistent normalization. During the refactor process, the original InvertedIndex tree was changed to match the ArticleMap (HashMap) structure. In doing so, we remove the need to traverse the tree, in any order, and utilize HashMap .contains().
+
+Tries were utilized as they are the most efficient when building a tree of characters that form words.
+
+For our trends <topic> <start> <end> function, we refactored from Assignment 8 to use a TreeMap within the KeywordMap class with dates as the keys and a map of keywords to a count of the keyword occurrences within the month as the value. This allows for lightning fast retrieval of information as the TreeMap naturally sorts the dates in ascending order. This also provides a way to organize articles by month. Once the month is identified, accessing the topic’s count for each month is as simple as getting the value associated with the topic as the key.
+
+For the articles <start> <end> function, we used a TreeSet of articles (and implemented a natural ordering to the Article class based on publication date, and then used the Article title as the tiebreaker) that allows a tree-based search of the set of Articles.
 
 ### Design Patterns
+__Parsing Strategy Design__
+We used a Strategy design pattern for the parsing of the articles. This was an appropriate choice because of the need for handling multiple potential data sources. We did not want to handle this complexity through a switch statement or a series of if/else statements. The Strategy design pattern allows us to implement different parsing strategies without modifying the classes that call the parser and to instead handle it through a factory class. This is also sustainable if this application were to grow to support more file types in the future (say, .xml files).
+
+Interface for ArticleParserStrategy to define what each strategy must be able to support. This enforces a similar function for each strategy.
+```
+public interface ArticleParserStrategy {
+   /**
+    * Parses the given file into a Map of Articles.
+    *
+    * @param file The input data file (CSV, JSON, etc.)
+    * @throws Exception if parsing fails due to format errors or I/O issues.
+    */
+   void parse(File file) throws Exception;
+}
+```
+
+__Commands: Command design__
+
+Our commands used the Command design pattern which treats each request as an object. Importantly, this allows us to decouple the execution of the commands from the program loop. Without this implementation, we would have likely had to use a monolithic CommandModeState class with a large switch block to handle the 9 operations available to the user in Command Mode and Interactive Mode.
+
+The Command design pattern is implemented again with an interface class, Command. This interface class defines that each Command must have an execute() method. The arguments from the user input are passed as arguments into the execute() method.
+```
+/**
+* The Command interface defines any methods that Commands must implement, including:
+* -execute(): carries out the main function of the command
+*/
+public interface Command {
+   void execute(String[] args);
+}
+```
+Within the CommandModeState class, we use a HashMap of the different commands to enable fast lookup of the correct object.
+```
+private final Map<String, Command> commands = new HashMap<>();
+
+commands.put("search", new SearchCommand(processor));
+commands.put("autocomplete", new AutocompleteCommand(processor));
+commands.put("topics", new TopicsCommand(processor));
+commands.put("trends", new TrendsCommand(processor));
+commands.put("articles", new ArticlesCommand(processor));
+commands.put("article", new ArticleDetailsCommand(processor));
+commands.put("stats", new StatsCommand(processor));
+commands.put("help", new HelpCommand());
+```
+
+Further in the class, we obtain the command keyword from the user’s input and match that to the correct key in the map and return the corresponding Command object.
+```
+String[] parts = line.split("\\s+");
+String cmdKeyword = parts[0].toLowerCase();
+
+if (cmdKeyword.equals("menu")) {
+   System.out.println("Returning to Main Menu...\n");
+   app.changeState(new MainMenuState());
+   return;
+}
+
+Command command = commands.get(cmdKeyword);
+```
+
+After some further parsing, we pass an array of strings as the argument into the execute() command and simply call the execute() method of the correct Command object type. That Command object’s execute() method makes the call to the Application/Logic layer and later formats the returned data to display to the CLI.
+
+```
+command.execute(args);
+```
+
+__Logger: Singleton design__
+
+Our logger was created as a Singleton instance, as we had to initiate the path_to_write once, and then every instance of the logger would write to the same location, as it would persist through the run of the program. Additionally, it ensures we have a single FileWriter Open, instead of opening and closing a writer repeatedly
+Initiation of Logger
+```
+Logger logger = Logger.getInstance();
+logger.initLogger(logFilePath);
+logger.LogInformation("Application Starting", Logger.LogStatus.INFO);
+```
+Later use in main
+```
+logger.LogInformation(String.format("Loaded %d articles from %s",ArticlesParsed.parsedArticles.size(),dataFilePath), Logger.LogStatus.INFO);
+```
+Later use in main menu State
+logger.LogInformation("Invalid Menu option provided", Logger.LogStatus.ERROR);
+
+Logger Singleton class
+```
+private FileWriter out;
+   public enum LogStatus{
+       INFO, ERROR
+   }
+   private static final Logger logger = new Logger();
+   //preventing external init
+    private Logger(){  }
+   public void initLogger(String filePath){
+       try{
+           out = new FileWriter(filePath,true);
+       }catch(Exception e){
+           System.out.println("Error int logger");
+       }
+   }
+   public static Logger getInstance(){
+       return logger;
+   }
+   public void LogInformation(String action, LogStatus logStatus){
+       DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+       var time = sdf.format(System.currentTimeMillis());
+       try{
+           out.write("["+time+"] "+logStatus+" "+action +"\n");
+           out.flush();
+       }catch(Exception e){
+           System.out.println("error");
+       }
+   }
+   public void CloseLogger(){
+       try{
+       out.close();
+       }catch(Exception e){
+           System.out.println();
+       }
+   }
+```
+
 
 ## Challenges Faced
