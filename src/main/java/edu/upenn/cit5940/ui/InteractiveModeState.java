@@ -33,7 +33,7 @@ public class InteractiveModeState implements AppState {
         var processor = app.getProcessor();
 
         switch (choice) {
-            case "1": // Search
+            case "1": // search
                 System.out.print("Enter search keyword(s) separated by spaces: ");
                 String searchInput = scanner.nextLine().trim();
                 if (!searchInput.isEmpty()) {
@@ -46,7 +46,7 @@ public class InteractiveModeState implements AppState {
                 waitForEnter(scanner);
                 break;
 
-            case "2": // Autocomplete
+            case "2": // autocomplete
                 System.out.print("Enter word prefix to autocomplete: ");
                 String prefixInput = scanner.nextLine().trim();
                 // build single element arg array and call autocomplete command

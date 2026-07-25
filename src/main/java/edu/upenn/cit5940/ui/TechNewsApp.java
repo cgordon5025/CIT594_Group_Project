@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TechNewsApp {
     private boolean running = true;
     private AppState currentState;
-    private final ArticleProcessor processor = new ArticleProcessor(); // Dependency to Floor 2
+    private final ArticleProcessor processor = new ArticleProcessor();
 
     public TechNewsApp() {
         // set up the UI layer and begins in main menu
@@ -19,8 +19,7 @@ public class TechNewsApp {
     }
 
     /**
-     * Helper method to change from one application state to another
-     *
+     * Changes from one application state to another
      * @param newState: new appstate
      */
     public void changeState(AppState newState) {
@@ -46,6 +45,10 @@ public class TechNewsApp {
         scanner.close();
     }
 
+    /**
+     * Getter for the processor that's associated with the TechNewsApp
+     * @return the ArticleProcessor
+     */
     public ArticleProcessor getProcessor() {
         return processor;
     }
