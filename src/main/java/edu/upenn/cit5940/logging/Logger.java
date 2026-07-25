@@ -6,9 +6,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Logger {
+    public static LogStatus LogStatus;
     private FileWriter out;
     public enum LogStatus{
-        INFO, ERROR
+        INFO, ERROR;
+
     }
     private static final Logger logger = new Logger();
 
@@ -17,7 +19,6 @@ public class Logger {
     public void initLogger(String filePath){
         if(out!=null) return; //prevent re-initialization
         try{
-
             out = new FileWriter(filePath,true);
         }catch(Exception e){
             System.out.println("Error int logger");

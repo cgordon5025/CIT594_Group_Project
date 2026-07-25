@@ -2,6 +2,7 @@ package edu.upenn.cit5940;
 
 import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.*;
+import edu.upenn.cit5940.logging.Logger;
 import edu.upenn.cit5940.ui.*;
 import edu.upenn.cit5940.ui.TechNewsApp;
 
@@ -11,7 +12,7 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args){
-
+        Logger logger = Logger.getInstance();
         System.out.println("=== Tech News Search Engine ===");
         System.out.println("Initializing n-tier architecture...");
 
@@ -46,7 +47,8 @@ public class Main {
 
         System.out.println("Loading articles from: " + dataFilePath);
         System.out.println("Log output to: " + logFilePath);
-
+        logger.initLogger(logFilePath);
+        logger.LogInformation("Application Starting", Logger.LogStatus.INFO);
 
         // figure out which parsing strategy to use
         try {
@@ -66,6 +68,7 @@ public class Main {
             // initialize treemap for month to topic count
             KeywordMap.buildTreeFromArticles();
             System.out.println(ArticlesParsed.parsedArticles.size() + " articles loaded");
+            logger.LogInformation(String.format("Loaded <%d> articles from <%s>", ArticlesParsed.parsedArticles.size(), dataFilePath), Logger.LogStatus.INFO);
             System.out.println("Architecture initialization complete!\n");
 
         } catch (IllegalArgumentException | UnsupportedOperationException e) {
