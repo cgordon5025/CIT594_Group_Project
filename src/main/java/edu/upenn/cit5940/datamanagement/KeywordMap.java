@@ -111,9 +111,6 @@ public class KeywordMap {
             if (articleDate.isEmpty()) continue;
             String dateNormalized = articleDate.substring(0, 7); // slice out the YYYY-MM
 
-
-
-
             if (!dateNormalized.matches(dateRegex)) {
                 continue;
             }
@@ -133,17 +130,17 @@ public class KeywordMap {
                 wordMap.put(wordInTitle, wordMap.getOrDefault(wordInTitle, 0) + 1);
             }
 
-            //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
-            var articleBody = article.getBody();
-            if(articleBody.isEmpty())continue;
-            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
-            for (String wordInBody : bodyNormalized) {
-                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
-                Map<String, Integer> wordMap = topicsTree.get(dateNormalized);
-                // if the wordMap doesn't have the word, default count to 0 and add 1
-                // otherwise take the existing count and add 1
-                wordMap.put(wordInBody, wordMap.getOrDefault(wordInBody, 0) + 1);
-            }
+//            //TODO: MY UNDERSTANDING IS THAT 'KEYWORDS' AR EALOS BUILT FORM THE BODY
+//            var articleBody = article.getBody();
+//            if(articleBody.isEmpty())continue;
+//            var bodyNormalized = NormalizeText.normalizeText(Arrays.toString(articleBody.split(" ")));
+//            for (String wordInBody : bodyNormalized) {
+//                if (STOP_WORDS.contains(wordInBody) || wordInBody.isEmpty() || wordInBody.length() == 1) continue;
+//                Map<String, Integer> wordMap = topicsTree.get(dateNormalized);
+//                // if the wordMap doesn't have the word, default count to 0 and add 1
+//                // otherwise take the existing count and add 1
+//                wordMap.put(wordInBody, wordMap.getOrDefault(wordInBody, 0) + 1);
+//            }
         }
     }
 }

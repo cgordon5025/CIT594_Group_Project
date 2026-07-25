@@ -12,16 +12,12 @@ public class Logger {
     }
     private static final Logger logger = new Logger();
 
-    //preventing external init
-//    private Logger(){
-//        try {
-//            out = new FileWriter("tech_news_search.log",true);
-//        }catch(Exception e){
-//
-//        }
-//    }
+    //preventing external init and empty
+    private Logger(){}
     public void initLogger(String filePath){
+        if(out!=null) return; //prevent re-initialization
         try{
+
             out = new FileWriter(filePath,true);
         }catch(Exception e){
             System.out.println("Error int logger");
@@ -40,7 +36,7 @@ public class Logger {
             System.out.println("error");
         }
     }
-    public void CloseLogger(){
+    public void closeLogger(){
         try{
         out.close();
         }catch(Exception e){
